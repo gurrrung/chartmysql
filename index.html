@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Assignment Project - Rahul Gurung</title>
+<style type="text/css">
+body {
+    width: 550px;
+}
+
+#chart-container {
+    width: 100%;
+    height: auto;
+    margin: 200px 400px;
+}
+</style>
+
+<script src="https://code.jquery.com/jquery-3.4.1.js" integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU=" crossorigin="anonymous"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js"></script>
+
+</head>
+<body>
+    <div id="chart-container">
+        <canvas id="graphCanvas"></canvas>
+    </div>
+
+    <script>
+        $(document).ready(function () {
+            setInterval(function () {
+                showGraph();
+            },1000);
+        });
+
+
+        function showGraph()
+        {
+            {
+                $.post("app.php", function (data) {
+                    console.log(data);
+                    var passed = [];
+                    var failed = [];
+                    var reappear = []
+
+                    passed.push(data[0].passed);
+                    failed.push(data[0].failed);
+                    reappear.push(data[0].reappear);
+                    console.log(passed);
+
+                    var chartdata = {
+                        labels: name,
+                        datasets: [
+                            {
+                                label: 'Student Passed',
+                                backgroundColor: '#49e2ff',
+                                data: passed
+                            },
+                            {
+                                label: 'Student Failed',
+                                backgroundColor: 'red',
+                                data: failed
+                            },
+                            {
+                                label: 'Student Reappear',
+                                backgroundColor: 'orange',
+                                data: reappear
+                            }
+                        ]
+                    };
+
+                    var graphTarget = $("#graphCanvas");
+
+                    var barGraph = new Chart(graphTarget, {
+                        type: 'bar',
+                        data: chartdata
+                    });
+
+                    Chart.defaults.global.animation.duration = 0
+
+                });
+            }
+        }
+        </script>
+
+</body>
+</html>
